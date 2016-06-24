@@ -1,6 +1,6 @@
 {
   "name": "code-builder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Anonymously execute external functions from another script",
   "main": "index.js",
   "directories": {
