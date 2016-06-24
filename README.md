@@ -81,6 +81,14 @@ CodeBuilder( fn ).run() == [1,2,3]
 ```
 
 ```javascript
+var code = CodeBuilder();
+
+code.Builder.addString('[1,2,3]')
+
+code.run() == [1,2,3]
+```
+
+```javascript
 var fn = function(){
   this.addString('function go(){ return ')
   this.addString('[1,2,3]')
