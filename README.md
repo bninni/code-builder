@@ -3,6 +3,10 @@
 
 Anonymously execute external functions from another script
 
+It allows you to build a script which runs in a separate context while also executing external code at specified locations.
+
+The external code is inaccessible from anywhere else within the script
+
 ## Install
 ```
 npm install code-builder
@@ -18,12 +22,6 @@ Then import the module into your program:
 var CodeBuilder = require('code-builder');
 ```
 
-## Background
-
-CodeBuilder allows you to build a script which runs in a separate context while also executing external code at specified locations.
-
-The external code is inaccessible from anywhere else within the script
-
 ## Usage
 
 **CodeBuilder( _fn_ )**
@@ -33,34 +31,42 @@ The input function is run a context of object containing three methods:
 
 To append raw Javascript code to the Script:
 
-**this.addString( _str_ )**
-  * _str_ (**String**) - The string representation of raw Javascript code to append to the Script
-  
+  * **this.addString( _str_ )**
+    * _str_ (**String**) - The string representation of raw Javascript code to append to the Script
+
+---
+	
 To append an external function call to the Script:
   
-**this.addFunction( _fn, str_ )**
-  * _fn_ (**Function**) - The external function to call at the current location in the Script
-  * _str_ (**String**) - _Optional_ - The string representation of raw Javascript code to place inside the call parenthesis
+  * **this.addFunction( _fn, str_ )**
+    * _fn_ (**Function**) - The external function to call at the current location in the Script
+    * _str_ (**String**) - _Optional_ - The string representation of raw Javascript code to place inside the call parenthesis
   
+--- 
+ 
 To append an external Script execution to the Script:
   
-**this.addScript( _fn, str_ )**
-  * _fn_ (**Function**) - The function used to create the new Script, whhich will be placed at the current Location in the Script
-  * _str_ (**String**) - _Optional_ - The string representation of raw Javascript code to place inside the call parenthesis
+  * **this.addScript( _fn, str_ )**
+    * _fn_ (**Function**) - The function used to create the new Script, whhich will be placed at the current Location in the Script
+    * _str_ (**String**) - _Optional_ - The string representation of raw Javascript code to place inside the call parenthesis
 
-It will return an Object with the following properties:
+---
+	
+It returns an Object with the following properties:
 
-**Builder** - Object containing the above three methods
-  * **Builder.addString( _str _)**
-  * **Builder.addFunction( _fn, str_ )**
-  * **Builder.addScript( _fn, str_ )**
+  * **Builder** - Object containing the above three methods
+    * **Builder.addString( _str_ )**
+    * **Builder.addFunction( _fn, str_ )**
+    * **Builder.addScript( _fn, str_ )**
+
+---
 
 To run the Script in a certain context:
   
-**run( _context_ )**
-  * _context_ (**Object**) - _Optional_ - An objecting containing any values you want to assign as global variables within the Script
-  * **Returns** the result of the last statement in the Script
-  
+  * **run( _context_ )**
+    * _context_ (**Object**) - _Optional_ - An objecting containing any values you want to assign as global variables within the Script
+
+Returns the result of the last statement in the Script
 
 ## Examples
 
@@ -68,7 +74,7 @@ To run the Script in a certain context:
 
 ```javascript
 var fn = function(){
-  this.addString('arr = [1,2,3]')
+  this.addString('[1,2,3]')
 }
 
 CodeBuilder( fn ).run() == [1,2,3]
@@ -76,7 +82,9 @@ CodeBuilder( fn ).run() == [1,2,3]
 
 ```javascript
 var fn = function(){
-  this.addString('function go(){ return [1,2,3] }')
+  this.addString('function go(){ return ')
+  this.addString('[1,2,3]')
+  this.addString('}')
   this.addString('go()')
 }
 
@@ -112,7 +120,7 @@ var result,
 
 CodeBuilder( fn ).run()
 
-result == [1,2,3,4]
+result == [1,2,3]
 ```
 
 **Externally Manipulating Script Objects**
